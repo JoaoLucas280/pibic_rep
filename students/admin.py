@@ -11,17 +11,20 @@ class EnrollmentSubjectInline(admin.TabularInline):
 class EnrollmentInline(admin.TabularInline):
     model = Enrollment
     extra = 0
-    max_num = 0
     show_change_link = True
     fields = ['curriculum_matrix', 'status']
-    readonly_fields = ['curriculum_matrix', 'status']
-    can_delete = False
 
 
 class StudentAdmin(admin.ModelAdmin):
     list_display = ['complete_name', 'rgm', 'email', 'phone']
     search_fields = ['complete_name', 'rgm', 'email']
     inlines = [EnrollmentInline]
+
+    def save_formset(self, request, form, formset, change):
+        super().save_formset(request, form, formset, change)
+        if formset.model is Enrollment:
+            for enrollment in formset.new_objects:
+                add_default_subjects(enrollment)
 
 
 class EnrollmentAdmin(admin.ModelAdmin):
