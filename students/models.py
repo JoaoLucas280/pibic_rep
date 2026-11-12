@@ -41,7 +41,7 @@ class EnrollmentSubject(models.Model):
     enrollment = models.ForeignKey(Enrollment, on_delete=models.CASCADE, related_name='subjects', verbose_name='Inscrição')
     subject = models.ForeignKey(Subject, on_delete=models.PROTECT, verbose_name='Disciplina')
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='regular', verbose_name='Status')
-
+    ia_score = models.DecimalField(max_digits=6, decimal_places=4, blank=True, null=True, verbose_name='Compatibilidade (IA)')
     class Meta:
         verbose_name = 'Disciplina da Inscrição'
         verbose_name_plural = 'Disciplinas da Inscrição'
