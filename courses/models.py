@@ -1,9 +1,11 @@
 from django.db import models
+from django.conf import settings
 
 # Create your models here.
 class Course(models.Model):
     name = models.CharField(max_length=100, verbose_name='Nome do Curso')
-    duration = models.IntegerField(blank=True, verbose_name='Duração do Curso (em anos)')
+    duration = models.IntegerField(blank=True, null=True, verbose_name='Duração do Curso (em anos)')
+    coordinators = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, verbose_name='Coordenadores')
 
     class Meta:
         verbose_name = 'Curso'
@@ -13,7 +15,7 @@ class Course(models.Model):
         return self.name
 
 class CurriculumMatrix(models.Model):
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name='Curso')
     year = models.IntegerField(verbose_name='Ano')
     
     class Meta:
@@ -32,7 +34,7 @@ class Semester(models.Model):
         verbose_name_plural = 'Semestres'
 
     def __str__(self):
-        return self.curriculum_matrix.course.name
+        return f"{self.curriculum_matrix} - {self.semester_number}º semestre"
 
 class Subject(models.Model):
     semester = models.ForeignKey(Semester, on_delete=models.CASCADE, verbose_name='Semestre')
