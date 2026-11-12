@@ -38,7 +38,7 @@ class Semester(models.Model):
 
 class Subject(models.Model):
     semester = models.ForeignKey(Semester, on_delete=models.CASCADE, verbose_name='Semestre')
-    name = models.CharField(max_length=100, verbose_name='Nome da Disciplina')
+    name = models.CharField(max_length=50, verbose_name='Nome da Disciplina')
     workload = models.IntegerField(verbose_name='Carga Horária')
 
     class Meta:
