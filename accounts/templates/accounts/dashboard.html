@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <title>Meus cursos</title>
+</head>
+<body>
+    <p>
+        Coordenador:
+        {{ request.user.get_full_name|default:request.user.username }}
+    </p>
+
+    <form action="{% url 'accounts:logout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Sair</button>
+    </form>
+
+    <h1>Meus cursos</h1>
+
+    {% if courses %}
+        {% for course in courses %}
+            <section>
+                <h2>{{ course.name }}</h2>
+
+                {% if course.duration %}
+                    <p>Duração: {{ course.duration }} ano(s)</p>
+                {% endif %}
+
+                {% for matrix in course.curriculummatrix_set.all %}
+                    <h3>Matriz curricular - {{ matrix.year }}</h3>
+
+                    {% for semester in matrix.semester_set.all %}
+                        <h4>{{ semester.semester_number }}º semestre</h4>
+
+                        <ul>
+                            {% for subject in semester.subject_set.all %}
+                                <li>{{ subject.name }} - {{ subject.workload }} horas</li>
+                            {% empty %}
+                                <li>Sem disciplinas cadastradas.</li>
+                            {% endfor %}
+                        </ul>
+                    {% empty %}
+                        <p>Sem semestres cadastrados.</p>
+                    {% endfor %}
+                {% empty %}
+                    <p>Sem matriz curricular cadastrada.</p>
+                {% endfor %}
+            </section>
+        {% endfor %}
+    {% else %}
+        <p>Você não está vinculado a nenhum curso.</p>
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <title>Login</title>
+</head>
+<body>
+    <h1>Login do coordenador</h1>
+
+    {% if form.errors %}
+        <p>Usuário ou senha inválidos.</p>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Entrar</button>
+    </form>
+</body>
+</html>
